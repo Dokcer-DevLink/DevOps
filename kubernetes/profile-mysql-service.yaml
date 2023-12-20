@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: profile-mysql-service
+  labels:
+    app: profile-mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: profile-mysql
+    tier: profile-mysql
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: profile-mysql-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: profile-mysql-pvc
+  labels:
+    app: profile-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: profile-mysql-storage
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profile-mysql-deployment
+  labels:
+    app: profile-mysql
+spec:
+  selector:
+    matchLabels:
+      app: profile-mysql
+      tier: profile-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: profile-mysql
+        tier: profile-mysql
+    spec:
+      containers:
+      - image: mysql:8.0
+        name: post-mysql
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: profile-mysql-config-map
+              key: mysql-database-name
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: profile-pass
+              key: mysql-root-password
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: profile-mysql-config-map
+              key: mysql-user-username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: profile-pass
+              key: mysql-user-password
+        ports:
+        - containerPort: 3306
+          name: profile-mysql
+        volumeMounts:
+        - name: profile-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: profile-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: profile-mysql-pvc
+      

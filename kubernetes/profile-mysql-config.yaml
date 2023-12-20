@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: profile-mysql-config-map
+data:
+  mysql-server: profile-mysql-service # mysql service name
+  mysql-database-name: auth
+  mysql-user-username: myUser
