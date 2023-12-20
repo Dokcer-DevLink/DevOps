@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-mysql-service
+  labels:
+    app: chat-mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: chat-mysql
+    tier: chat-mysql
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: chat-mysql-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: chat-mysql-pvc
+  labels:
+    app: chat-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: chat-mysql-storage
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-mysql-deployment
+  labels:
+    app: chat-mysql
+spec:
+  selector:
+    matchLabels:
+      app: chat-mysql
+      tier: chat-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: chat-mysql
+        tier: chat-mysql
+    spec:
+      containers:
+      - image: mysql:8.0
+        name: chat-mysql
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: chat-mysql-config-map
+              key: mysql-database-name
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: chat-mysql-pass
+              key: mysql-root-password
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: chat-mysql-config-map
+              key: mysql-user-username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: chat-mysql-pass
+              key: mysql-user-password
+        ports:
+        - containerPort: 3306
+          name: chat-mysql
+        volumeMounts:
+        - name: chat-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: chat-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: chat-mysql-pvc
+      
