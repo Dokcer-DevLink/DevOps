@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mysql-service
+  labels:
+    app: auth-mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: auth-mysql
+    tier: auth-mysql
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: auth-mysql-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-mysql-pvc
+  labels:
+    app: auth-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: auth-mysql-storage
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-mysql-deployment
+  labels:
+    app: auth-mysql
+spec:
+  selector:
+    matchLabels:
+      app: auth-mysql
+      tier: auth-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: auth-mysql
+        tier: auth-mysql
+    spec:
+      containers:
+      - image: mysql:8.0
+        name: auth-mysql
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: auth-mysql-config-map
+              key: mysql-database-name
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: auth-mysql-pass
+              key: mysql-root-password
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: auth-mysql-config-map
+              key: mysql-user-username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: auth-mysql-pass
+              key: mysql-user-password
+        ports:
+        - containerPort: 3306
+          name: auth-mysql
+        volumeMounts:
+        - name: auth-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: auth-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: auth-mysql-pvc
+      
