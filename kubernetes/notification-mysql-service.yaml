@@ -80,7 +80,7 @@ spec:
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: notify-mysql-pass
+              name: notify-pass
               key: mysql-user-password
         ports:
         - containerPort: 3306
