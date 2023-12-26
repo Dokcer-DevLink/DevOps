@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mentoring-mysql-service
+  labels:
+    app: mentoring-mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mentoring-mysql
+    tier: mentoring-mysql
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: mentoring-mysql-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mentoring-mysql-pvc
+  labels:
+    app: mentoring-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: mentoring-mysql-storage
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mentoring-mysql-deployment
+  labels:
+    app: mentoring-mysql
+spec:
+  selector:
+    matchLabels:
+      app: mentoring-mysql
+      tier: mentoring-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mentoring-mysql
+        tier: mentoring-mysql
+    spec:
+      containers:
+      - image: mysql:8.0
+        name: mentoring-mysql
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: mentoring-mysql-config-map
+              key: mysql-database-name
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mentoring-mysql-pass
+              key: mysql-root-password
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: mentoring-mysql-config-map
+              key: mysql-user-username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mentoring-mysql-pass
+              key: mysql-user-password
+        ports:
+        - containerPort: 3306
+          name: mentoring-mysql
+        volumeMounts:
+        - name: mentoring-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mentoring-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mentoring-mysql-pvc
+      
