@@ -38,7 +38,7 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: post-mysql-pass
+              name: post-pass
               key: mysql-user-password
         - name: DB_SERVER
           valueFrom:
@@ -55,4 +55,19 @@ spec:
             configMapKeyRef:
               name: post-mysql-config-map
               key: mysql-user-username
+        - name: S3_BUCKET_NAME
+          valueFrom:
+            secretKeyRef:
+              name: post-pass
+              key: s3-bucket-name
+        - name: S3_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: post-pass
+              key: s3-access-key
+        - name: S3_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: post-pass
+              key: s3-serect-key
       serviceAccountName: post-service-account
