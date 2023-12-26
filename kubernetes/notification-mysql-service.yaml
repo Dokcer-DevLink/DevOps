@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notify-mysql-service
+  labels:
+    app: notify-mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: notify-mysql
+    tier: notify-mysql
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: notify-mysql-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: notify-mysql-pvc
+  labels:
+    app: notify-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: notify-mysql-storage
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notify-mysql-deployment
+  labels:
+    app: notify-mysql
+spec:
+  selector:
+    matchLabels:
+      app: notify-mysql
+      tier: notify-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: notify-mysql
+        tier: notify-mysql
+    spec:
+      containers:
+      - image: mysql:8.0
+        name: notify-mysql
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: notify-mysql-config-map
+              key: mysql-database-name
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: notify-pass
+              key: mysql-root-password
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: notify-mysql-config-map
+              key: mysql-user-username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: notify-mysql-pass
+              key: mysql-user-password
+        ports:
+        - containerPort: 3306
+          name: notify-mysql
+        volumeMounts:
+        - name: notify-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: notify-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: notify-mysql-pvc
+      
