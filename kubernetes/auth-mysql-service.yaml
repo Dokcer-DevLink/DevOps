@@ -70,7 +70,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: auth-mysql-pass
+              name: auth-pass
               key: mysql-root-password
         - name: MYSQL_USER
           valueFrom:
@@ -80,7 +80,7 @@ spec:
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: auth-mysql-pass
+              name: auth-pass
               key: mysql-user-password
         ports:
         - containerPort: 3306

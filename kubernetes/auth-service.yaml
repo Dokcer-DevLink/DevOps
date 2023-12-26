@@ -41,7 +41,7 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: auth-mysql-pass
+              name: auth-pass
               key: mysql-user-password
         - name: DB_SERVER
           valueFrom:
@@ -60,6 +60,16 @@ spec:
               key: mysql-user-username
         - name: REDIS_HOST
           value: redis-service # redis-service 명
+        - name: GITHUB_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: auth-pass
+              key: github-client-id
+        - name: GITHUB_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-pass
+              key: github-client-secret
       volumes:
       - name: auth-config
         configMap:
