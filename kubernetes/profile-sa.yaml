@@ -33,7 +33,7 @@ metadata:
   namespace: default # This only grants permissions within the "development" namespace.
 subjects:
 - kind: ServiceAccount
-  name: post-service-account # Name is case sensitive
+  name: profile-service-account # Name is case sensitive
   namespace: default
 roleRef:
   kind: Role
