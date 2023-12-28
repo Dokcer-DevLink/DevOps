@@ -28,7 +28,7 @@ spec:
         app: mentoring
     spec:
       containers:
-      - name: chat
+      - name: mentoring
         image: moonsungkim/mentoring-service
         imagePullPolicy: Always #comment except minikube
         ports:

@@ -28,7 +28,7 @@ spec:
         app: notify
     spec:
       containers:
-      - name: chat
+      - name: notify
         image: moonsungkim/notify-service
         imagePullPolicy: Always #comment except minikube
         ports:
