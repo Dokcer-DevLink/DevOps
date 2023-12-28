@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-mysql-service
+  labels:
+    app: post-mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: post-mysql
+    tier: post-mysql
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: post-mysql-pvc
+  labels:
+    app: post-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-mysql-deployment
+  labels:
+    app: post-mysql
+spec:
+  selector:
+    matchLabels:
+      app: post-mysql
+      tier: post-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: post-mysql
+        tier: post-mysql
+    spec:
+      containers:
+      - image: mysql:8.0
+        name: post-mysql
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: post-mysql-config-map
+              key: mysql-database-name
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: post-pass
+              key: mysql-root-password
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: post-mysql-config-map
+              key: mysql-user-username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: post-pass
+              key: mysql-user-password
+        ports:
+        - containerPort: 3306
+          name: post-mysql
+        volumeMounts:
+        - name: post-mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: post-mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: post-mysql-pvc
+      
