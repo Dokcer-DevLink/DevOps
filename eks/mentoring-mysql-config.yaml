@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mentoring-mysql-config-map
+data:
+  mysql-server: mentoring-mysql-service # mysql service name
+  mysql-database-name: mentoring
+  mysql-user-username: myUser
