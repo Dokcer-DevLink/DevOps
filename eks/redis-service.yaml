@@ -10,16 +10,6 @@ spec:
   selector:
     app: auth-redis
     tier: redis
-  
---- 
-
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: auth-redis-storage
-provisioner: kubernetes.io/gce-pd
-parameters:
-  type: pd-ssd
 
 ---
 
@@ -30,7 +20,6 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: auth-redis-storage
   resources:
     requests:
       storage: 5Gi
