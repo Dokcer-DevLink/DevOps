@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-config
+data:
+  application.yml: |
+    jwt:
+      header: Authorization
+      secret: Z29vcm10aG9uLWRvY2tlci1wcm9qZWN0LWF1dGgtc2VydmljZS1qd3QtYXV0aG9yaXphdGlvbi1rZXktZ29vcm10aG9kLWRvY2tlci1wcm9qZWN0LWF1dGgtc2VydmljZQo=
+      access-token-validity-in-seconds: 1800 
+      refresh-token-validity-in-seconds: 604800
