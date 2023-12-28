@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notify-mysql-config-map
+data:
+  mysql-server: notify-mysql-service # mysql service name
+  mysql-database-name: notify
+  mysql-user-username: myUser

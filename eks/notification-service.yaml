@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notify-service
+spec:
+  selector:
+    app: notify
+  ports:
+    - port: 80
+      targetPort: 8080
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notify-deployment
+  labels:
+    app: notify
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notify
+  template:
+    metadata:
+      labels:
+        app: notify
+    spec:
+      containers:
+      - name: notify
+        image: moonsungkim/notify-service
+        imagePullPolicy: Always #comment except minikube
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: notify-pass
+              key: mysql-user-password
+        - name: DB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: notify-mysql-config-map
+              key: mysql-server
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: notify-mysql-config-map
+              key: mysql-database-name
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: notify-mysql-config-map
+              key: mysql-user-username
+        - name: KAFKA_SERVICE
+          value: kafka-service
+        - name: KAFKA_TOPIC_NAME
+          value: kafka-mentoring
+        - name: KAFKA_GROUP_ID
+          value: notification-service
+      serviceAccountName: notify-service-account
