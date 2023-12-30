@@ -70,4 +70,9 @@ spec:
             secretKeyRef:
               name: post-pass
               key: s3-serect-key
+        - name: KAKAO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: post-pass
+              key: kakao-secret-key
       serviceAccountName: post-service-account
