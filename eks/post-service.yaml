@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: post
-        image: lordofkangs/post-service:38
+        image: lordofkangs/post-service:39
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080
