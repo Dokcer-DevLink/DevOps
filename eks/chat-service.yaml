@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: chat
-        image: lordofkangs/chat-service:14
+        image: lordofkangs/chat-service:15
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080
