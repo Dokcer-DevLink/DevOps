@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: moonsungkim/gateway-service-eks:1
+        image: moonsungkim/gateway-service:1
         imagePullPolicy: Always
         ports:
         - containerPort: 8000

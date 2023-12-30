@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: post
-        image: moonsungkim/post-service-eks:1
+        image: moonsungkim/post-service:1
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080

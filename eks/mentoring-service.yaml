@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: mentoring
-        image: moonsungkim/mentoring-service-eks:1
+        image: moonsungkim/mentoring-service:1
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080
