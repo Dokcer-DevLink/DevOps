@@ -59,7 +59,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mentoring-mysql-pass
+              name: mentoring-pass
               key: mysql-root-password
         - name: MYSQL_USER
           valueFrom:
@@ -69,7 +69,7 @@ spec:
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mentoring-mysql-pass
+              name: mentoring-pass
               key: mysql-user-password
         ports:
         - containerPort: 3306
