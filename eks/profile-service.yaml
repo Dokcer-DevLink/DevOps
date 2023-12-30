@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: profile
-        image: moonsungkim/profile-service
+        image: moonsungkim/profile-service-eks:1
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080
