@@ -4,5 +4,5 @@ metadata:
   name: post-mysql-config-map
 data:
   mysql-server: post-mysql-service # mysql service name
-  mysql-database-name: auth
+  mysql-database-name: post
   mysql-user-username: myUser

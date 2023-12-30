@@ -4,5 +4,5 @@ metadata:
   name: chat-mysql-config-map
 data:
   mysql-server: chat-mysql-service # mysql service name
-  mysql-database-name: auth
+  mysql-database-name: chat
   mysql-user-username: myUser
