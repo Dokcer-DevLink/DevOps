@@ -36,3 +36,5 @@ resources:
   - profile-mysql-config.yaml
   - profile-mysql-service.yaml
   - profile-service.yaml
+  - frontend-sa.yaml
+  - frontend-service.yaml
