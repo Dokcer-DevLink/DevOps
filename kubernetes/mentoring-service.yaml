@@ -37,7 +37,7 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mentoring-mysql-pass
+              name: mentoring-pass
               key: mysql-user-password
         - name: DB_SERVER
           valueFrom:
@@ -58,4 +58,19 @@ spec:
           value: kafka-service
         - name: KAFKA_TOPIC_NAME
           value: kafka-mentoring
+        - name: S3_BUCKET_NAME
+          valueFrom:
+            secretKeyRef:
+              name: mentoring-pass
+              key: s3-bucket-name
+        - name: S3_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mentoring-pass
+              key: s3-access-key
+        - name: S3_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mentoring-pass
+              key: s3-serect-key
       serviceAccountName: mentoring-service-account
