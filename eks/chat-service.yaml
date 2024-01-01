@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: chat
-        image: moonsungkim/chat-service:7
+        image: moonsungkim/chat-service:8
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080
