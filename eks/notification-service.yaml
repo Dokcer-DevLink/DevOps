@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: notify
-        image: moonsungkim/notify-service:14
+        image: moonsungkim/notify-service:1
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080
