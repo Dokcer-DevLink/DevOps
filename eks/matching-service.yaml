@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: matching
-        image: moonsungkim/matching-service:1
+        image: moonsungkim/matching-service:4
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080
