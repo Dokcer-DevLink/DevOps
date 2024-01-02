@@ -4,7 +4,7 @@ metadata:
   labels:
     app: elasticsearch
   name: elasticsearch-svc
-  namespace: elastic-search
+  namespace: logging
 spec:
   ports:
   - name: elasticsearch-rest
@@ -27,7 +27,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: elasticsearch
-  namespace: elastic-search
+  namespace: logging
   labels:
     app: elasticsearch
 spec:
