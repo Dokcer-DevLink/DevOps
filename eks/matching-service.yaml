@@ -34,4 +34,10 @@ spec:
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080
+        env:
+        - name: KAKAO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: matching-pass
+              key: kakao-secret-key
       serviceAccountName: match-service-account
