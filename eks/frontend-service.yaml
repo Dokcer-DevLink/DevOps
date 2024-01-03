@@ -36,12 +36,5 @@ spec:
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 3000
-        env:
-        - name: NEXT_PUBLIC_API_URL
-          value: "http://34.16.48.178"
-        - name: NEXT_PUBLIC_ADDRESS_API_URL
-          value: "https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/"
-        - name: NEXT_PUBLIC_SOCKE_API_URL
-          value: "http://34.31.160.98/"
 
       serviceAccountName: frontend-service-account
