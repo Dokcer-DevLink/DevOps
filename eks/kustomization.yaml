@@ -38,7 +38,3 @@ resources:
   - profile-service.yaml
   - frontend-sa.yaml
   - frontend-service.yaml
-  - logging-ns.yaml
-  - elastic-search.yaml
-  - kinina.yaml
-  - fluentd.yaml
