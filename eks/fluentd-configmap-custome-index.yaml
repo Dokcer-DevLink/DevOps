@@ -2,23 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: fluentd-config
-  namespace: logging
+  namespace: kube-logging
 data:
-  kubernetes.conf: |
-    # CUSTOM: Replace parse for stdout log
-      time_format %Y-%m-%dT%H:%M:%S.%NZ
-      <parse>
-        @type multi_format
-        <pattern>
-          format json
-          time_key time
-          time_format %Y-%m-%dT%H:%M:%S.%NZ
-        </pattern>
-        <pattern>
-          format /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
-          time_format %Y-%m-%dT%H:%M:%S.%N%:z
-        </pattern>
-      </parse>
   fluent.conf: |
     <match fluent.**>
         # this tells fluentd to not output its log on stdout
@@ -40,7 +25,7 @@ data:
     <filter kubernetes.**>
         @type kubernetes_metadata
     </filter>
-    <match kubernetes.var.log.containers.**logging**.log>
+    <match kubernetes.var.log.containers.**kube-logging**.log>
     @type null
     </match>
     <match kubernetes.var.log.containers.**kube-system**.log>
