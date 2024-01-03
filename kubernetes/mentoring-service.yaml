@@ -73,4 +73,9 @@ spec:
             secretKeyRef:
               name: mentoring-pass
               key: s3-serect-key
+        - name: NAVER_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mentoring-pass
+              key: naver-secret-key
       serviceAccountName: mentoring-service-account
