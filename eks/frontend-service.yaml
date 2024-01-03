@@ -6,7 +6,7 @@ spec:
   selector:
     app: frontend
   type: LoadBalancer
-  loadBalancerClass: service.k8s.aws/alb
+  loadBalancerClass: service.k8s.aws/nlb
   ports:
     - port: 80
       targetPort: 3000
