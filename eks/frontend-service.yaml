@@ -6,10 +6,11 @@ spec:
   selector:
     app: frontend
   type: LoadBalancer
-  loadBalancerClass: service.k8s.aws/nlb
   ports:
     - port: 80
       targetPort: 3000
+  annotations: 
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
 
 ---
 
