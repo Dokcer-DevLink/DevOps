@@ -61,9 +61,13 @@ spec:
           value: kafka-service
         - name: KAFKA_TOPIC_NAME
           value: kafka-chat
+        resources:
+          requests:
+            cpu: "400m"
       serviceAccountName: chat-service-account
 
 ---
+
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

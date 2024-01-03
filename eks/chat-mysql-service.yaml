@@ -74,6 +74,9 @@ spec:
         ports:
         - containerPort: 3306
           name: chat-mysql
+        resources:
+          requests:
+            cpu: "400m"
         volumeMounts:
         - name: chat-mysql-persistent-storage
           mountPath: /var/lib/mysql
