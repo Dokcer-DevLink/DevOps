@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: moonsungkim/frontend-nextjs:16
+        image: moonsungkim/frontend-nextjs:17
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 3000
