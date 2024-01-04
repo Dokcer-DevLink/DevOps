@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: auth
-        image: moonsungkim/auth-service:4
+        image: moonsungkim/auth-service:5
         imagePullPolicy: Always #comment except minikube
         ports:
         - containerPort: 8080
